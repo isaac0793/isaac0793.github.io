@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isaac Castañeda Montoya · Análisis de datos</title>
+<meta name="description" content="Isaac Castañeda Montoya: físico y maestro en Ciencias por la UNAM. Análisis de datos con Python (pandas, NumPy, SciPy, Matplotlib), clasificación computacional a gran escala y formación experimental en física.">
+<meta name="author" content="Isaac Castañeda Montoya">
+<meta name="theme-color" content="#173D4B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Isaac Castañeda Montoya · Análisis de datos">
+<meta property="og:description" content="Físico y maestro en Ciencias por la UNAM. Análisis de datos con Python, clasificación computacional a gran escala y trabajo de laboratorio.">
+<meta property="og:url" content="https://isaac0793.github.io/">
+<meta property="og:locale" content="es_MX">
+<link rel="canonical" href="https://isaac0793.github.io/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23173D4B'/%3E%3Cpolygon points='14,46 38,46 50,25 26,25' fill='none' stroke='%237FD6CF' stroke-width='4' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='46' r='5' fill='%23F08A55'/%3E%3Ccircle cx='26' cy='39' r='5' fill='%23F08A55'/%3E%3Ccircle cx='38' cy='32' r='5' fill='%23F08A55'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=STIX+Two+Text:ital,wght@0,500;0,600;0,700;1,500&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F6;
+    --surface: #FFFFFF;
+    --surface-2: #E8EEF0;
+    --ink: #1C2B32;
+    --ink-2: #44565F;
+    --muted: #677984;
+    --rule: #D3DCE0;
+    --accent: #0A7C79;
+    --accent-soft: #D7ECEA;
+    --orange: #D7652D;
+    --orange-ink: #B4501C;
+    --band: #173D4B;
+    --band-ink: #FFFFFF;
+    --band-ink-2: #C9DADF;
+    --band-rule: rgba(255, 255, 255, 0.16);
+    --band-accent: #7FD6CF;
+    --band-orange: #F08A55;
+    --lattice-dot: rgba(255, 255, 255, 0.5);
+    --lattice-line: rgba(255, 255, 255, 0.12);
+    --cell-fill: rgba(127, 214, 207, 0.16);
+    --focus: #0A7C79;
+
+    --display: "STIX Two Text", "STIX Two", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+    --gutter: clamp(16px, 4vw, 32px);
+    --maxw: 1120px;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D171C;
+      --surface: #132128;
+      --surface-2: #182A32;
+      --ink: #E4ECEF;
+      --ink-2: #B3C3CA;
+      --muted: #8FA1AA;
+      --rule: #25373F;
+      --accent: #43B9B2;
+      --accent-soft: #173A3C;
+      --orange: #F08A55;
+      --orange-ink: #F29B6B;
+      --band: #102E39;
+      --band-ink: #F2F7F8;
+      --band-ink-2: #B5CAD1;
+      --band-rule: rgba(255, 255, 255, 0.14);
+      --band-accent: #7FD6CF;
+      --band-orange: #F59A68;
+      --lattice-dot: rgba(255, 255, 255, 0.45);
+      --lattice-line: rgba(255, 255, 255, 0.10);
+      --cell-fill: rgba(127, 214, 207, 0.14);
+      --focus: #7FD6CF;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D171C;
+    --surface: #132128;
+    --surface-2: #182A32;
+    --ink: #E4ECEF;
+    --ink-2: #B3C3CA;
+    --muted: #8FA1AA;
+    --rule: #25373F;
+    --accent: #43B9B2;
+    --accent-soft: #173A3C;
+    --orange: #F08A55;
+    --orange-ink: #F29B6B;
+    --band: #102E39;
+    --band-ink: #F2F7F8;
+    --band-ink-2: #B5CAD1;
+    --band-rule: rgba(255, 255, 255, 0.14);
+    --band-accent: #7FD6CF;
+    --band-orange: #F59A68;
+    --lattice-dot: rgba(255, 255, 255, 0.45);
+    --lattice-line: rgba(255, 255, 255, 0.10);
+    --cell-fill: rgba(127, 214, 207, 0.14);
+    --focus: #7FD6CF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--band);
+    border-bottom: 1px solid var(--band-rule);
+    color: var(--band-ink);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .topbar-inner { display: flex; align-items: center; gap: 20px; min-height: 58px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--band-ink); text-decoration: none; font-weight: 600; font-size: 15px; white-space: nowrap; }
+  .mono-badge {
+    font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+    color: var(--band-accent); border: 1px solid var(--band-accent); border-radius: 6px; padding: 2px 6px;
+  }
+  .nav-links { display: flex; gap: 20px; list-style: none; margin: 0 0 0 auto; padding: 0; }
+  .nav-links a { color: var(--band-ink-2); text-decoration: none; font-size: 14.5px; }
+  .nav-links a:hover { color: var(--band-ink); }
+  .nav-cv {
+    font-weight: 600; font-size: 14px; color: #1B1410; background: var(--band-orange);
+    padding: 7px 14px; border-radius: 7px; text-decoration: none;
+  }
+  .nav-cv:hover { filter: brightness(1.06); }
+  @media (max-width: 940px) { .nav-links { display: none; } .nav-cv { margin-left: auto; } }
+  @media (max-width: 400px) { .brand-name { display: none; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .m { font-family: var(--display); font-style: italic; }
+  .nw { white-space: nowrap; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  /* ---------- Hero ---------- */
+  .band { background: var(--band); color: var(--band-ink); }
+  .hero { padding-block: clamp(40px, 7vw, 76px) clamp(36px, 6vw, 64px); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: center;
+  }
+  .hero .eyebrow { color: var(--band-accent); }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(40px, 6.4vw, 66px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin-top: 14px;
+  }
+  .hero .role {
+    margin-top: 14px;
+    font-size: clamp(18px, 2.1vw, 21px);
+    font-weight: 500;
+    color: var(--band-ink);
+  }
+  .hero .lead {
+    margin-top: 16px;
+    max-width: 58ch;
+    color: var(--band-ink-2);
+    font-size: 17.5px;
+  }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 22px; padding: 0; list-style: none; }
+  .meta li {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--band-ink);
+    border: 1px solid var(--band-rule);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--sans); font-weight: 600; font-size: 15.5px;
+    text-decoration: none; border-radius: 8px; padding: 11px 18px;
+    border: 1px solid transparent; cursor: pointer; line-height: 1.2;
+  }
+  .btn-primary { background: var(--band-orange); color: #1B1410; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-ghost { color: var(--band-ink); border-color: var(--band-rule); background: transparent; }
+  .btn-ghost:hover { border-color: var(--band-accent); }
+  .btn svg { width: 17px; height: 17px; flex: none; }
+
+  .lattice-fig { margin: 0; }
+  .lattice-fig svg { display: block; width: 100%; height: auto; max-width: 460px; margin-inline: auto; }
+  .lattice-fig figcaption {
+    margin: 12px auto 0; max-width: 460px;
+    font-size: 13.5px; line-height: 1.5; color: var(--band-ink-2);
+  }
+  .lat-line { stroke: var(--lattice-line); stroke-width: 1; }
+  .lat-dot { fill: var(--lattice-dot); }
+  .lat-cell { fill: var(--cell-fill); stroke: var(--band-accent); stroke-width: 1.5; }
+  .lat-diag { stroke: var(--band-accent); stroke-width: 1; opacity: 0.6; }
+  .lat-fixed { fill: var(--band-orange); stroke: var(--band); stroke-width: 2.5; }
+  .lat-arc { fill: none; stroke: var(--band-ink); stroke-width: 1.5; opacity: 0.85; }
+  .lat-arrow { fill: var(--band-ink); opacity: 0.85; }
+  .lat-label { fill: var(--band-ink-2); font-family: var(--mono); font-size: 12px; }
+  .lat-label-strong { fill: var(--band-ink); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+
+  /* ---------- Sections ---------- */
+  section.block { padding-block: clamp(52px, 8vw, 88px); }
+  section.block + section.block { border-top: 1px solid var(--rule); }
+  .sec-head { max-width: 760px; }
+  .sec-head h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(30px, 4.2vw, 42px);
+    line-height: 1.12;
+    margin-top: 10px;
+  }
+  .sec-head .lead { margin-top: 14px; color: var(--ink-2); max-width: 64ch; }
+  h3 { font-size: 18.5px; font-weight: 600; line-height: 1.35; }
+
+  /* ---------- Case study ---------- */
+  .case-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 48px);
+    margin-top: 34px;
+    align-items: start;
+  }
+  .prose p + p { margin-top: 14px; }
+  .prose { color: var(--ink); max-width: 64ch; }
+  .fact-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .facts { margin: 0; display: grid; gap: 14px; }
+  .facts div { display: grid; gap: 2px; }
+  .facts dt { font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .facts dd { margin: 0; font-size: 15.5px; color: var(--ink); }
+
+  .ladder {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.45fr);
+    align-items: stretch;
+    gap: 10px;
+  }
+  .rung {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px 20px 20px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .rung-hero { background: var(--accent-soft); border-color: transparent; }
+  .rung-value { white-space: nowrap; }
+  .rung-hero .rung-value { font-size: clamp(26px, 3.1vw, 36px); }
+  .rung-level { font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .rung-value { font-family: var(--sans); font-weight: 600; font-size: clamp(30px, 3.6vw, 40px); line-height: 1.1; color: var(--ink); margin-top: 4px; }
+  .rung-name { font-weight: 600; font-size: 16px; color: var(--ink); }
+  .rung-note { font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+  .mult {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; padding-inline: 4px; color: var(--ink-2);
+  }
+  .mult b { font-family: var(--mono); font-weight: 500; font-size: 17px; color: var(--orange-ink); }
+  .mult span { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .mult svg { width: 22px; height: 22px; color: var(--muted); }
+  .ladder-note { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+  .strip-wrap { margin-top: 34px; position: relative; }
+  .strip-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .strip-sub { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+  .strip {
+    position: relative;
+    height: 108px;
+    margin: 18px 14px 0;
+  }
+  .strip .axis { position: absolute; left: 0; right: 0; top: 64px; height: 1px; background: var(--rule); }
+  .strip .tick { position: absolute; top: 58px; width: 1px; height: 13px; background: var(--rule); }
+  .strip .tick-label {
+    position: absolute; top: 76px; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .strip .dot {
+    position: absolute; top: 64px; transform: translate(-50%, -50%);
+    width: 22px; height: 22px; padding: 0; border: 0; background: transparent; cursor: default;
+    display: grid; place-items: center;
+  }
+  .strip .dot::before {
+    content: ""; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 2px var(--bg);
+  }
+  .strip .dot-label {
+    position: absolute; top: 12px; transform: translateX(-50%);
+    font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; text-align: center; line-height: 1.25;
+  }
+  .strip .dot-label small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+  .strip .tip {
+    position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg); font-size: 13px; line-height: 1.35;
+    padding: 6px 9px; border-radius: 6px; white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity .12s ease;
+  }
+  .strip .dot:hover .tip, .strip .dot:focus-visible .tip { opacity: 1; }
+  .strip .dot:hover::before, .strip .dot:focus-visible::before { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+
+  .steps {
+    list-style: none; margin: 44px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 28px;
+    counter-reset: step;
+  }
+  .steps li { counter-increment: step; border-top: 2px solid var(--ink); padding-top: 12px; }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono); font-size: 12.5px; color: var(--accent); letter-spacing: 0.06em;
+  }
+  .steps h3 { margin-top: 4px; font-size: 17px; }
+  .steps p { margin-top: 6px; font-size: 15px; color: var(--ink-2); }
+  .steps-title { margin-top: 48px; font-size: 15px; font-weight: 600; }
+  .steps-title + .steps { margin-top: 16px; }
+
+  .transfer {
+    margin-top: 44px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: clamp(20px, 3vw, 30px);
+  }
+  .transfer h3 { font-family: var(--display); font-weight: 600; font-size: 24px; }
+  .transfer-grid {
+    margin-top: 18px;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 24px;
+  }
+  .transfer-grid h4 { margin: 0; font-size: 15.5px; font-weight: 600; color: var(--accent); }
+  .transfer-grid p { margin-top: 6px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+
+  details.tech {
+    margin-top: 22px; border: 1px solid var(--rule); border-radius: var(--radius);
+    background: transparent; padding: 0 18px;
+  }
+  details.tech summary {
+    cursor: pointer; padding: 14px 0; font-weight: 600; font-size: 15px; color: var(--ink);
+    list-style-position: inside;
+  }
+  details.tech p { padding-bottom: 16px; font-size: 15px; color: var(--ink-2); max-width: 78ch; }
+
+  /* ---------- Lab ---------- */
+  .practices {
+    margin-top: 34px;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;
+  }
+  .practice {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);
+    padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .practice p { font-size: 15px; color: var(--ink-2); line-height: 1.5; }
+  .formula {
+    margin-top: auto; padding-top: 10px;
+    font-family: var(--display); font-style: italic; font-size: 17px; color: var(--ink);
+  }
+  .formula sub, .formula sup { font-size: 0.7em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; padding: 0; list-style: none; }
+  .chips li {
+    font-size: 13.5px; padding: 3px 10px; border-radius: 999px;
+    background: var(--surface-2); color: var(--ink);
+  }
+  .labs-title { margin-top: 46px; font-size: 15px; font-weight: 600; }
+  .labs {
+    margin: 14px 0 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px;
+  }
+  .labs li { padding: 14px 0 16px; border-top: 1px solid var(--rule); }
+  .labs li b { display: block; font-weight: 600; font-size: 16px; }
+  .labs li span { display: block; margin-top: 3px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+  .source-note { margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+  .service {
+    margin-top: 40px;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 20px 32px;
+    padding-top: 26px; border-top: 2px solid var(--ink);
+  }
+  .service .when { font-family: var(--mono); font-size: 13px; color: var(--orange-ink); margin-top: 4px; }
+  .service ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 15.5px; }
+  .service ul li + li { margin-top: 4px; }
+  .service .where { font-size: 14.5px; color: var(--ink-2); margin-top: 2px; }
+
+  /* ---------- Communication ---------- */
+  .talks { margin-top: 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .talk { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 22px 22px 24px; }
+  .talk .kind { font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .talk h3 { font-family: var(--display); font-weight: 600; font-size: 22px; margin-top: 8px; line-height: 1.25; }
+  .talk .where { margin-top: 8px; font-size: 14.5px; color: var(--ink-2); }
+  .talk .when { font-family: var(--mono); font-size: 13px; color: var(--orange-ink); margin-top: 2px; }
+  .talk p.what { margin-top: 12px; font-size: 15px; color: var(--ink-2); }
+
+  /* ---------- Tools ---------- */
+  .tools { margin-top: 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+  .tool-group { padding: 18px 0 20px; border-top: 1px solid var(--rule); }
+  .tool-group h3 { font-size: 16px; }
+  .tool-group .chips li { background: var(--surface); border: 1px solid var(--rule); }
+  .lvl { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-left: 4px; }
+
+  /* ---------- Education ---------- */
+  .edu { margin-top: 32px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 28px 44px; }
+  .degree { padding: 18px 0 20px; border-top: 1px solid var(--rule); }
+  .degree:first-child { border-top: 2px solid var(--ink); }
+  .degree .years { font-family: var(--mono); font-size: 13px; color: var(--orange-ink); }
+  .degree h3 { margin-top: 4px; font-size: 19px; }
+  .degree .inst { font-size: 15px; color: var(--ink-2); }
+  .degree .honor { margin-top: 8px; font-size: 14.5px; font-weight: 600; color: var(--accent); }
+  .degree .thesis { margin-top: 6px; font-size: 15px; color: var(--ink-2); }
+  .side-list h3 { font-size: 16px; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .side-list ul { margin: 10px 0 0; padding-left: 18px; font-size: 15px; color: var(--ink-2); }
+  .side-list ul li + li { margin-top: 6px; }
+  .side-list + .side-list { margin-top: 28px; }
+  .langs { display: grid; gap: 6px; margin-top: 10px; }
+  .langs div { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; border-bottom: 1px dotted var(--rule); padding-bottom: 6px; }
+  .langs span:last-child { font-family: var(--mono); font-size: 13.5px; color: var(--ink-2); }
+
+  /* ---------- Contact ---------- */
+  .contact { padding-block: clamp(48px, 7vw, 76px); }
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px 48px; align-items: end; }
+  .contact h2 { font-family: var(--display); font-weight: 600; font-size: clamp(30px, 4vw, 42px); line-height: 1.12; }
+  .contact p.lead { margin-top: 12px; color: var(--band-ink-2); max-width: 54ch; }
+  .contact .actions { margin-top: 0; justify-content: flex-start; }
+  .contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .contact-list li { display: flex; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--band-rule); padding-bottom: 10px; }
+  .contact-list .k { font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--band-accent); min-width: 78px; }
+  .contact-list a, .contact-list span.v { color: var(--band-ink); text-decoration: none; overflow-wrap: anywhere; }
+  .contact-list a:hover { text-decoration: underline; }
+  .foot { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--band-rule); font-size: 13px; color: var(--band-ink-2); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .transfer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .practices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 860px) {
+    .hero-grid, .case-top, .edu, .contact-grid { grid-template-columns: minmax(0, 1fr); }
+    .lattice-fig svg { max-width: 400px; }
+    .ladder { grid-template-columns: minmax(0, 1fr); }
+    .mult { flex-direction: row; gap: 8px; padding-block: 2px; }
+    .mult svg { transform: rotate(90deg); }
+    .labs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .service { grid-template-columns: minmax(0, 1fr); }
+    .talks, .tools { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .steps, .practices, .transfer-grid, .labs { grid-template-columns: minmax(0, 1fr); }
+    .strip { margin-inline: 10px; }
+    .strip .tick-label.minor { display: none; }
+    .strip .dot-label small { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar" aria-label="Secciones">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#inicio" aria-label="Isaac Castañeda Montoya, inicio"><span class="mono-badge">ICM</span><span class="brand-name">Isaac Castañeda Montoya</span></a>
+    <ul class="nav-links">
+      <li><a href="#proyecto">Proyecto</a></li>
+      <li><a href="#laboratorio">Laboratorio</a></li>
+      <li><a href="#comunicacion">Comunicación</a></li>
+      <li><a href="#herramientas">Herramientas</a></li>
+      <li><a href="#formacion">Formación</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a class="nav-cv" href="CV_ICM.pdf" target="_blank" rel="noopener">CV</a>
+  </div>
+</nav>
+
+<header class="band" id="inicio">
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Portafolio · Análisis de datos</p>
+        <h1>Isaac Castañeda Montoya</h1>
+        <p class="role">Físico y Maestro en Ciencias por la UNAM · Análisis de datos con Python</p>
+        <p class="lead">Mención honorífica en licenciatura y maestría. Trabajo los datos como se trabaja una medición: con un procedimiento claro, con su incertidumbre y con conclusiones que se pueden verificar. Herramientas: Python con pandas, NumPy, SciPy y Matplotlib.</p>
+        <ul class="meta" aria-label="Datos generales">
+          <li>Durango, Dgo.</li>
+          <li>Home office</li>
+          <li>Inglés B2</li>
+        </ul>
+        <div class="actions">
+          <a class="btn btn-primary" href="CV_ICM.pdf" target="_blank" rel="noopener">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10"/><path d="M5.5 8.5 10 13l4.5-4.5"/><path d="M4 16.5h12"/></svg>
+            Ver CV (PDF)
+          </a>
+          <a class="btn btn-ghost" href="mailto:inquisidor0793@ciencias.unam.mx">Escribirme</a>
+        </div>
+      </div>
+      <figure class="lattice-fig">
+        <svg viewBox="0 0 440 340" role="img" aria-labelledby="lat-title" style="overflow:hidden">
+  <title id="lat-title">Red hexagonal con su celda fundamental resaltada; tres puntos fijos en naranja y un arco que indica la rotación de 120 grados.</title>
+  <defs>
+    <marker id="lat-arrowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="lat-arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <g><line class="lat-line" x1="-27.0" y1="5.5" x2="49.0" y2="5.5"/><line class="lat-line" x1="-27.0" y1="137.2" x2="49.0" y2="137.2"/><line class="lat-line" x1="-27.0" y1="137.2" x2="11.0" y2="71.4"/><line class="lat-line" x1="11.0" y1="71.4" x2="87.0" y2="71.4"/><line class="lat-line" x1="11.0" y1="71.4" x2="49.0" y2="5.5"/><line class="lat-line" x1="11.0" y1="71.4" x2="-27.0" y2="5.5"/><line class="lat-line" x1="49.0" y1="5.5" x2="125.0" y2="5.5"/><line class="lat-line" x1="-27.0" y1="268.8" x2="49.0" y2="268.8"/><line class="lat-line" x1="-27.0" y1="268.8" x2="11.0" y2="203.0"/><line class="lat-line" x1="11.0" y1="203.0" x2="87.0" y2="203.0"/><line class="lat-line" x1="11.0" y1="203.0" x2="49.0" y2="137.2"/><line class="lat-line" x1="11.0" y1="203.0" x2="-27.0" y2="137.2"/><line class="lat-line" x1="49.0" y1="137.2" x2="125.0" y2="137.2"/><line class="lat-line" x1="49.0" y1="137.2" x2="87.0" y2="71.4"/><line class="lat-line" x1="49.0" y1="137.2" x2="11.0" y2="71.4"/><line class="lat-line" x1="87.0" y1="71.4" x2="163.0" y2="71.4"/><line class="lat-line" x1="87.0" y1="71.4" x2="125.0" y2="5.5"/><line class="lat-line" x1="87.0" y1="71.4" x2="49.0" y2="5.5"/><line class="lat-line" x1="125.0" y1="5.5" x2="201.0" y2="5.5"/><line class="lat-line" x1="11.0" y1="334.6" x2="87.0" y2="334.6"/><line class="lat-line" x1="11.0" y1="334.6" x2="49.0" y2="268.8"/><line class="lat-line" x1="11.0" y1="334.6" x2="-27.0" y2="268.8"/><line class="lat-line" x1="49.0" y1="268.8" x2="125.0" y2="268.8"/><line class="lat-line" x1="49.0" y1="268.8" x2="87.0" y2="203.0"/><line class="lat-line" x1="49.0" y1="268.8" x2="11.0" y2="203.0"/><line class="lat-line" x1="87.0" y1="203.0" x2="163.0" y2="203.0"/><line class="lat-line" x1="87.0" y1="203.0" x2="125.0" y2="137.2"/><line class="lat-line" x1="87.0" y1="203.0" x2="49.0" y2="137.2"/><line class="lat-line" x1="125.0" y1="137.2" x2="201.0" y2="137.2"/><line class="lat-line" x1="125.0" y1="137.2" x2="163.0" y2="71.4"/><line class="lat-line" x1="125.0" y1="137.2" x2="87.0" y2="71.4"/><line class="lat-line" x1="163.0" y1="71.4" x2="239.0" y2="71.4"/><line class="lat-line" x1="163.0" y1="71.4" x2="201.0" y2="5.5"/><line class="lat-line" x1="163.0" y1="71.4" x2="125.0" y2="5.5"/><line class="lat-line" x1="201.0" y1="5.5" x2="277.0" y2="5.5"/><line class="lat-line" x1="87.0" y1="334.6" x2="163.0" y2="334.6"/><line class="lat-line" x1="87.0" y1="334.6" x2="125.0" y2="268.8"/><line class="lat-line" x1="87.0" y1="334.6" x2="49.0" y2="268.8"/><line class="lat-line" x1="125.0" y1="268.8" x2="201.0" y2="268.8"/><line class="lat-line" x1="125.0" y1="268.8" x2="163.0" y2="203.0"/><line class="lat-line" x1="125.0" y1="268.8" x2="87.0" y2="203.0"/><line class="lat-line" x1="163.0" y1="203.0" x2="239.0" y2="203.0"/><line class="lat-line" x1="163.0" y1="203.0" x2="201.0" y2="137.2"/><line class="lat-line" x1="163.0" y1="203.0" x2="125.0" y2="137.2"/><line class="lat-line" x1="201.0" y1="137.2" x2="277.0" y2="137.2"/><line class="lat-line" x1="201.0" y1="137.2" x2="239.0" y2="71.4"/><line class="lat-line" x1="201.0" y1="137.2" x2="163.0" y2="71.4"/><line class="lat-line" x1="239.0" y1="71.4" x2="315.0" y2="71.4"/><line class="lat-line" x1="239.0" y1="71.4" x2="277.0" y2="5.5"/><line class="lat-line" x1="239.0" y1="71.4" x2="201.0" y2="5.5"/><line class="lat-line" x1="277.0" y1="5.5" x2="353.0" y2="5.5"/><line class="lat-line" x1="163.0" y1="334.6" x2="239.0" y2="334.6"/><line class="lat-line" x1="163.0" y1="334.6" x2="201.0" y2="268.8"/><line class="lat-line" x1="163.0" y1="334.6" x2="125.0" y2="268.8"/><line class="lat-line" x1="201.0" y1="268.8" x2="277.0" y2="268.8"/><line class="lat-line" x1="201.0" y1="268.8" x2="239.0" y2="203.0"/><line class="lat-line" x1="201.0" y1="268.8" x2="163.0" y2="203.0"/><line class="lat-line" x1="239.0" y1="203.0" x2="315.0" y2="203.0"/><line class="lat-line" x1="239.0" y1="203.0" x2="277.0" y2="137.2"/><line class="lat-line" x1="239.0" y1="203.0" x2="201.0" y2="137.2"/><line class="lat-line" x1="277.0" y1="137.2" x2="353.0" y2="137.2"/><line class="lat-line" x1="277.0" y1="137.2" x2="315.0" y2="71.4"/><line class="lat-line" x1="277.0" y1="137.2" x2="239.0" y2="71.4"/><line class="lat-line" x1="315.0" y1="71.4" x2="391.0" y2="71.4"/><line class="lat-line" x1="315.0" y1="71.4" x2="353.0" y2="5.5"/><line class="lat-line" x1="315.0" y1="71.4" x2="277.0" y2="5.5"/><line class="lat-line" x1="353.0" y1="5.5" x2="429.0" y2="5.5"/><line class="lat-line" x1="239.0" y1="334.6" x2="315.0" y2="334.6"/><line class="lat-line" x1="239.0" y1="334.6" x2="277.0" y2="268.8"/><line class="lat-line" x1="239.0" y1="334.6" x2="201.0" y2="268.8"/><line class="lat-line" x1="277.0" y1="268.8" x2="353.0" y2="268.8"/><line class="lat-line" x1="277.0" y1="268.8" x2="315.0" y2="203.0"/><line class="lat-line" x1="277.0" y1="268.8" x2="239.0" y2="203.0"/><line class="lat-line" x1="315.0" y1="203.0" x2="391.0" y2="203.0"/><line class="lat-line" x1="315.0" y1="203.0" x2="353.0" y2="137.2"/><line class="lat-line" x1="315.0" y1="203.0" x2="277.0" y2="137.2"/><line class="lat-line" x1="353.0" y1="137.2" x2="429.0" y2="137.2"/><line class="lat-line" x1="353.0" y1="137.2" x2="391.0" y2="71.4"/><line class="lat-line" x1="353.0" y1="137.2" x2="315.0" y2="71.4"/><line class="lat-line" x1="391.0" y1="71.4" x2="467.0" y2="71.4"/><line class="lat-line" x1="391.0" y1="71.4" x2="429.0" y2="5.5"/><line class="lat-line" x1="391.0" y1="71.4" x2="353.0" y2="5.5"/><line class="lat-line" x1="315.0" y1="334.6" x2="391.0" y2="334.6"/><line class="lat-line" x1="315.0" y1="334.6" x2="353.0" y2="268.8"/><line class="lat-line" x1="315.0" y1="334.6" x2="277.0" y2="268.8"/><line class="lat-line" x1="353.0" y1="268.8" x2="429.0" y2="268.8"/><line class="lat-line" x1="353.0" y1="268.8" x2="391.0" y2="203.0"/><line class="lat-line" x1="353.0" y1="268.8" x2="315.0" y2="203.0"/><line class="lat-line" x1="391.0" y1="203.0" x2="467.0" y2="203.0"/><line class="lat-line" x1="391.0" y1="203.0" x2="429.0" y2="137.2"/><line class="lat-line" x1="391.0" y1="203.0" x2="353.0" y2="137.2"/><line class="lat-line" x1="429.0" y1="137.2" x2="467.0" y2="71.4"/><line class="lat-line" x1="429.0" y1="137.2" x2="391.0" y2="71.4"/><line class="lat-line" x1="467.0" y1="71.4" x2="429.0" y2="5.5"/><line class="lat-line" x1="391.0" y1="334.6" x2="467.0" y2="334.6"/><line class="lat-line" x1="391.0" y1="334.6" x2="429.0" y2="268.8"/><line class="lat-line" x1="391.0" y1="334.6" x2="353.0" y2="268.8"/><line class="lat-line" x1="429.0" y1="268.8" x2="467.0" y2="203.0"/><line class="lat-line" x1="429.0" y1="268.8" x2="391.0" y2="203.0"/><line class="lat-line" x1="467.0" y1="203.0" x2="429.0" y2="137.2"/><line class="lat-line" x1="467.0" y1="334.6" x2="429.0" y2="268.8"/></g>
+  <polygon class="lat-cell" points="163.0,203.0 239.0,203.0 277.0,137.2 201.0,137.2"/>
+  <line class="lat-diag" x1="239.0" y1="203.0" x2="201.0" y2="137.2"/>
+  <g><circle class="lat-dot" cx="11.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="49.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="11.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="49.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="87.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="125.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="11.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="49.0" cy="268.8" r="2.6"/><circle class="lat-dot" cx="87.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="125.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="163.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="201.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="87.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="125.0" cy="268.8" r="2.6"/><circle class="lat-dot" cx="163.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="201.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="239.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="277.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="163.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="201.0" cy="268.8" r="2.6"/><circle class="lat-dot" cx="239.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="277.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="315.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="353.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="239.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="277.0" cy="268.8" r="2.6"/><circle class="lat-dot" cx="315.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="353.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="391.0" cy="71.4" r="2.6"/><circle class="lat-dot" cx="429.0" cy="5.5" r="2.6"/><circle class="lat-dot" cx="315.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="353.0" cy="268.8" r="2.6"/><circle class="lat-dot" cx="391.0" cy="203.0" r="2.6"/><circle class="lat-dot" cx="429.0" cy="137.2" r="2.6"/><circle class="lat-dot" cx="391.0" cy="334.6" r="2.6"/><circle class="lat-dot" cx="429.0" cy="268.8" r="2.6"/></g>
+  <path class="lat-arc" d="M 133.0 203.0 A 30 30 0 0 0 178.0 229.0" marker-end="url(#lat-arrowhead)"/>
+  <text class="lat-label" x="138.0" y="250.3" text-anchor="middle">120°</text>
+  <circle class="lat-fixed" cx="163.0" cy="203.0" r="7"/><circle class="lat-fixed" cx="201.0" cy="181.1" r="7"/><circle class="lat-fixed" cx="239.0" cy="159.1" r="7"/>
+  <text class="lat-label-strong" x="18" y="28">T² / ℤ₃</text>
+  <text class="lat-label" x="18" y="46">3 puntos fijos</text>
+</svg>
+        <figcaption>Una red hexagonal y su celda (un toro de dos dimensiones). Una rotación de 120° deja fijos tres puntos de la celda, en naranja: es el orbifolio T²/ℤ₃. Mi tesis trabaja con los análogos de estas geometrías en seis dimensiones.</figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="block" id="proyecto" aria-labelledby="proyecto-titulo">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Proyecto principal · Tesis de maestría</p>
+        <h2 id="proyecto-titulo">Clasificación computacional a gran escala</h2>
+        <p class="lead">Un problema de física teórica que, visto desde los datos, es un ejercicio de escala, estructura y automatización: organizar cerca de 28.9 millones de casos en una jerarquía de tres niveles.</p>
+      </div>
+
+      <div class="case-top">
+        <div class="prose">
+          <p><strong>El problema, sin tecnicismos.</strong> La teoría de cuerdas requiere seis dimensiones adicionales, enrolladas en una geometría diminuta. Una familia de esas geometrías, los orbifolios toroidales, puede enumerarse por completo con las herramientas de la cristalografía: en esencia, son «cristales» de seis dimensiones.</p>
+          <p>Mi tesis clasificó las geometrías de esta familia que no conservan supersimetría (<span class="nw"><span class="m">N</span>&nbsp;=&nbsp;0</span>) y analizó a fondo casos seleccionados. El resultado es un catálogo jerárquico: cada simetría de rotación admite varias redes y cada red admite muchas formas de combinar rotaciones con traslaciones.</p>
+        </div>
+        <aside class="fact-card" aria-label="Ficha del proyecto">
+          <dl class="facts">
+            <div><dt>Contexto</dt><dd>Tesis de maestría, UNAM · 2024–2026</dd></div>
+            <div><dt>Dirección</dt><dd>Dr. Saúl Noé Ramos Sánchez</dd></div>
+            <div><dt>Herramientas</dt><dd>CARAT · GAP · LaTeX</dd></div>
+            <div><dt>Resultado</dt><dd>Tesis aprobada con mención honorífica; póster en el XIX Mexican Workshop on Particles and Fields (2025)</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="ladder" role="group" aria-label="Resultado de la clasificación por niveles">
+        <div class="rung">
+          <span class="rung-level">Nivel 1</span>
+          <span class="rung-value">7,043</span>
+          <span class="rung-name">Grupos de punto</span>
+          <span class="rung-note">Simetrías de rotación (clases Q)</span>
+        </div>
+        <div class="mult" aria-label="Refinamiento promedio: 12 veces">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="m14 7 5 5-5 5"/></svg>
+          <b>×12</b><span>en promedio</span>
+        </div>
+        <div class="rung">
+          <span class="rung-level">Nivel 2</span>
+          <span class="rung-value">85,122</span>
+          <span class="rung-name">Clases Z</span>
+          <span class="rung-note">Red del toro compatible con cada simetría</span>
+        </div>
+        <div class="mult" aria-label="Refinamiento promedio: 340 veces">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="m14 7 5 5-5 5"/></svg>
+          <b>×340</b><span>en promedio</span>
+        </div>
+        <div class="rung rung-hero">
+          <span class="rung-level">Nivel 3</span>
+          <span class="rung-value">≈ 28.9 millones</span>
+          <span class="rung-name">Clases afines</span>
+          <span class="rung-note">Rotaciones combinadas con traslaciones: cada una es una geometría distinta</span>
+        </div>
+      </div>
+      <p class="ladder-note">Los factores ×12 y ×340 son promedios calculados con los totales de cada nivel (85,122 ÷ 7,043 y 28.9 millones ÷ 85,122).</p>
+
+      <div class="strip-wrap">
+        <p class="strip-title">Los tres niveles en la misma escala</p>
+        <p class="strip-sub">Escala logarítmica: cada marca vale diez veces la anterior.</p>
+        <div class="strip">
+        <div class="axis"></div>
+        <div class="tick" style="left:0.00%"></div>
+        <div class="tick-label" style="left:0.00%">1 mil</div>
+        <div class="tick" style="left:20.00%"></div>
+        <div class="tick-label minor" style="left:20.00%">10 mil</div>
+        <div class="tick" style="left:40.00%"></div>
+        <div class="tick-label" style="left:40.00%">100 mil</div>
+        <div class="tick" style="left:60.00%"></div>
+        <div class="tick-label minor" style="left:60.00%">1 M</div>
+        <div class="tick" style="left:80.00%"></div>
+        <div class="tick-label" style="left:80.00%">10 M</div>
+        <div class="tick" style="left:100.00%"></div>
+        <div class="tick-label" style="left:100.00%">100 M</div>
+        <div class="dot-label" style="left:16.96%">7,043<small>grupos de punto</small></div>
+        <span class="dot" tabindex="0" style="left:16.96%"><span class="tip">Grupos de punto (clases Q): 7,043</span></span>
+        <div class="dot-label" style="left:38.60%">85,122<small>clases Z</small></div>
+        <span class="dot" tabindex="0" style="left:38.60%"><span class="tip">Clases Z: 85,122</span></span>
+        <div class="dot-label" style="left:89.22%;transform:translateX(-80%)">≈ 28.9 M<small>clases afines</small></div>
+        <span class="dot" tabindex="0" style="left:89.22%"><span class="tip" style="left:auto;right:-4px;transform:none">Clases afines: ≈ 28.9 millones</span></span>
+        </div>
+        <div class="sr-only"><table>
+          <caption>Número de clases por nivel de la clasificación</caption>
+          <thead><tr><th scope="col">Nivel</th><th scope="col">Clases</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Grupos de punto (clases Q)</th><td>7,043</td></tr>
+            <tr><th scope="row">Clases Z</th><td>85,122</td></tr>
+            <tr><th scope="row">Clases afines</th><td>aproximadamente 28.9 millones</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <p class="steps-title">Cómo lo trabajé</p>
+      <ol class="steps">
+        <li><h3>Partir de la clasificación cristalográfica</h3><p>Grupos espaciales en seis dimensiones, trabajados con CARAT y GAP.</p></li>
+        <li><h3>Aplicar el criterio físico</h3><p>Quedarse con las geometrías que no conservan supersimetría (<span class="nw"><span class="m">N</span>&nbsp;=&nbsp;0</span>).</p></li>
+        <li><h3>Organizar en tres niveles</h3><p>Grupo de punto → clase Z → clase afín: una jerarquía que se puede recorrer y contar nivel por nivel.</p></li>
+        <li><h3>Automatizar</h3><p>Procesamiento, filtrado y organización de los archivos de resultados mediante herramientas computacionales.</p></li>
+        <li><h3>Analizar casos a fondo</h3><p>Estructura de puntos fijos de clases afines seleccionadas.</p></li>
+        <li><h3>Comunicar</h3><p>Tesis con mención honorífica y póster en el XIX Mexican Workshop on Particles and Fields (León, Gto., 2025).</p></li>
+      </ol>
+
+      <div class="transfer">
+        <h3>Lo que este proyecto dice de cómo trabajo con datos</h3>
+        <div class="transfer-grid">
+          <div><h4>Escala</h4><p>Un problema con decenas de millones de casos, abordado de forma sistemática y no caso por caso.</p></div>
+          <div><h4>Estructura</h4><p>Datos jerárquicos que se agrupan, cuentan y refinan por niveles: la misma lógica de un <code>groupby</code> anidado en pandas.</p></div>
+          <div><h4>Automatización</h4><p>Procesos automatizados en lugar de trabajo manual repetitivo.</p></div>
+          <div><h4>Comunicación</h4><p>Resultados técnicos presentados a especialistas y conceptos abstractos explicados a público general.</p></div>
+        </div>
+      </div>
+
+      <details class="tech">
+        <summary>Nota técnica (para lectores de física)</summary>
+        <p>Clasificación de orbifolios toroidales simétricos de la cuerda heterótica que dan lugar a teorías efectivas en cuatro dimensiones sin supersimetría (<span class="nw"><span class="m">N</span>&nbsp;=&nbsp;0</span>), a partir de la clasificación cristalográfica de grupos espaciales en seis dimensiones: 7,043 clases Q (grupos de punto), 85,122 clases Z (geometría del toro) y cerca de 28.9 millones de clases de equivalencia afín (roto-traslaciones). Se estudió además la estructura de puntos fijos de clases afines seleccionadas. Título de la tesis: <em>Geometrías para compactificaciones de cuerdas sin supersimetría</em>.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="block" id="laboratorio" aria-labelledby="lab-titulo">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Laboratorio y medición</p>
+        <h2 id="lab-titulo">Siete laboratorios de física experimental</h2>
+        <p class="lead">En la licenciatura cursé los siete laboratorios del plan de estudios de Física de la Facultad de Ciencias (UNAM). En todos se repite el mismo ciclo: seguir un procedimiento, medir, estimar la incertidumbre, ajustar un modelo y reportar.</p>
+      </div>
+
+      <div class="practices">
+        <div class="practice">
+          <h3>Procedimiento</h3>
+          <p>Experimentos conforme a guías y procedimientos, con registro sistemático de las mediciones.</p>
+        </div>
+        <div class="practice">
+          <h3>Instrumentos</h3>
+          <p>Uso básico de los equipos de laboratorio:</p>
+          <ul class="chips">
+            <li>Osciloscopio</li><li>Multímetro</li><li>Láseres y arreglos ópticos</li><li>Detectores</li>
+          </ul>
+        </div>
+        <div class="practice">
+          <h3>Incertidumbre</h3>
+          <p>Análisis de errores, propagación de incertidumbres y ajuste de curvas por mínimos cuadrados.</p>
+          <p class="formula" aria-label="Propagación de incertidumbres: sigma de f al cuadrado es la suma de las derivadas parciales al cuadrado por sigma de x sub i al cuadrado">σ<sub>f</sub><sup>2</sup> = Σ (∂f/∂x<sub>i</sub>)<sup>2</sup> σ<sub>i</sub><sup>2</sup></p>
+        </div>
+        <div class="practice">
+          <h3>Reporte</h3>
+          <p>Reportes técnicos con resultados, incertidumbres, gráficas y conclusiones.</p>
+        </div>
+      </div>
+
+      <p class="labs-title">Los laboratorios</p>
+      <ul class="labs">
+        <li><b>Mecánica</b><span>Medición de longitudes, tiempos y fuerzas; errores, gráficas y ajuste de curvas.</span></li>
+        <li><b>Fenómenos Colectivos</b><span>Medios continuos, termodinámica y ondas.</span></li>
+        <li><b>Electromagnetismo</b><span>Experimentos de electricidad y magnetismo y manejo de datos experimentales.</span></li>
+        <li><b>Óptica</b><span>Óptica geométrica, polarización, interferencia, difracción, láseres y optoelectrónica.</span></li>
+        <li><b>Electrónica</b><span>Instrumentos básicos de medición, dispositivos electrónicos y sistemas de medición.</span></li>
+        <li><b>Física Contemporánea I y II</b><span>Medición de constantes fundamentales y de efectos cuánticos; física atómica, nuclear y de materia condensada.</span></li>
+      </ul>
+      <p class="source-note">Contenidos según los programas oficiales de las asignaturas de la licenciatura en Física, Facultad de Ciencias, UNAM.</p>
+
+      <div class="service">
+        <div>
+          <h3>Laboratorio de Óptica Cuántica de Rydberg</h3>
+          <p class="where">Instituto de Física, UNAM · Servicio social</p>
+          <p class="when">2022–2023</p>
+        </div>
+        <ul>
+          <li>Revisión bibliográfica especializada en óptica cuántica y física atómica.</li>
+          <li>Apoyo en documentación técnica y organización de información científica.</li>
+          <li>Elaboración de diseños mediante Autodesk.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="comunicacion" aria-labelledby="com-titulo">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Comunicación de resultados</p>
+        <h2 id="com-titulo">Explicar lo técnico a distintos públicos</h2>
+        <p class="lead">Un análisis sirve cuando alguien más lo entiende y puede decidir con él. Estas son dos presentaciones recientes, una para especialistas y otra para público general.</p>
+      </div>
+      <div class="talks">
+        <article class="talk">
+          <p class="kind">Póster científico · Especialistas</p>
+          <h3>Clasificación de orbifolios simétricos toroidales con <span class="nw"><span class="m">N</span>&nbsp;=&nbsp;0</span></h3>
+          <p class="where">XIX Mexican Workshop on Particles and Fields (MWPF) · León, Gto.</p>
+          <p class="when">20–24 de octubre de 2025</p>
+          <p class="what">Presentación de los resultados de la tesis ante la comunidad mexicana de física de partículas y campos: síntesis de resultados, diseño del material visual y discusión técnica.</p>
+        </article>
+        <article class="talk">
+          <p class="kind">Minicharla · Público general</p>
+          <h3>Superposición cuántica y el gato de Schrödinger</h3>
+          <p class="where">Día de Puertas Abiertas del Instituto de Física, UNAM</p>
+          <p class="when">14 de noviembre de 2025</p>
+          <p class="what">Conceptos abstractos de mecánica cuántica explicados en lenguaje accesible, con atención a las preguntas del público.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="herramientas" aria-labelledby="her-titulo">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Herramientas</p>
+        <h2 id="her-titulo">Con qué trabajo</h2>
+      </div>
+      <div class="tools">
+        <div class="tool-group">
+          <h3>Análisis de datos</h3>
+          <ul class="chips">
+            <li>Python <span class="lvl">intermedio</span></li><li>pandas</li><li>NumPy</li><li>SciPy</li><li>Matplotlib</li><li>Archivos .csv y .txt</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Métodos</h3>
+          <ul class="chips">
+            <li>Ajuste de curvas (mínimos cuadrados)</li><li>Análisis de incertidumbre</li><li>Simulación Monte Carlo</li><li>Métodos numéricos</li><li>Visualización de datos</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Cómputo científico</h3>
+          <ul class="chips">
+            <li>Mathematica</li><li>MATLAB</li><li>ROOT</li><li>CARAT</li><li>GAP</li><li>C++ <span class="lvl">básico</span></li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Entorno y documentación</h3>
+          <ul class="chips">
+            <li>Linux / Bash <span class="lvl">intermedio</span></li><li>LaTeX / Overleaf <span class="lvl">avanzado</span></li><li>Autodesk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="formacion" aria-labelledby="for-titulo">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Formación</p>
+        <h2 id="for-titulo">UNAM, con mención honorífica</h2>
+      </div>
+      <div class="edu">
+        <div>
+          <div class="degree">
+            <p class="years">2024–2026</p>
+            <h3>Maestría en Ciencias (Física)</h3>
+            <p class="inst">Universidad Nacional Autónoma de México</p>
+            <p class="honor">Mención honorífica · Promedio 9.54/10</p>
+            <p class="thesis">Tesis: <em>Geometrías para compactificaciones de cuerdas sin supersimetría</em>. Dirigida por el Dr. Saúl Noé Ramos Sánchez.</p>
+          </div>
+          <div class="degree">
+            <p class="years">2018–2023</p>
+            <h3>Licenciatura en Física</h3>
+            <p class="inst">Facultad de Ciencias, Universidad Nacional Autónoma de México</p>
+            <p class="honor">Mención honorífica · Promedio 9.04/10</p>
+            <p class="thesis">Formación en física computacional, física estadística, métodos matemáticos y física experimental.</p>
+          </div>
+        </div>
+        <div>
+          <div class="side-list">
+            <h3>Distinciones</h3>
+            <ul>
+              <li>Segundo lugar, XXV Concurso Estatal de Ciencias Básicas, Matemáticas y Física.</li>
+              <li>Tercer lugar, XXIV Concurso Estatal de Ciencias Básicas y Matemáticas.</li>
+            </ul>
+          </div>
+          <div class="side-list">
+            <h3>Idiomas</h3>
+            <div class="langs">
+              <div><span>Español</span><span>Nativo</span></div>
+              <div><span>Inglés</span><span>B2 · intermedio alto</span></div>
+              <div><span>Alemán</span><span>A1 · básico</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="band">
+  <div class="wrap contact" id="contacto">
+    <div class="contact-grid">
+      <div>
+        <p class="eyebrow" style="color: var(--band-accent)">Contacto</p>
+        <h2 style="margin-top: 10px">Busco un puesto de análisis de datos en modalidad remota</h2>
+        <p class="lead">Si tu equipo necesita a alguien que ordene, analice y explique datos con rigor, escríbeme.</p>
+        <div class="actions" style="margin-top: 22px">
+          <a class="btn btn-primary" href="CV_ICM.pdf" target="_blank" rel="noopener">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10"/><path d="M5.5 8.5 10 13l4.5-4.5"/><path d="M4 16.5h12"/></svg>
+            Ver CV (PDF)
+          </a>
+        </div>
+      </div>
+      <ul class="contact-list">
+        <li><span class="k">Correo</span><a href="mailto:inquisidor0793@ciencias.unam.mx">inquisidor0793@ciencias.unam.mx</a></li>
+        <li><span class="k">Ubicación</span><span class="v">Durango, Dgo., México · home office</span></li>
+      </ul>
+    </div>
+    <div class="foot">
+      <span>© 2026 Isaac Castañeda Montoya</span>
+      <span>Actualizado en septiembre de 2026</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
