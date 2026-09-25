@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#173D4B">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Isaac Castañeda Montoya · Análisis de datos">
-<meta property="og:description" content="Físico y maestro en Ciencias por la UNAM. Análisis de datos con Python, clasificación computacional a gran escala y trabajo de laboratorio.">
+<meta property="og:description" content="Físico y maestro en Ciencias por la UNAM. Análisis de datos con Python, clasificación computacional a gran escala y análisis de datos reales del CERN y del observatorio HAWC.">
 <meta property="og:url" content="https://isaac0793.github.io/">
 <meta property="og:locale" content="es_MX">
 <link rel="canonical" href="https://isaac0793.github.io/">
@@ -493,7 +493,7 @@
     <a class="brand" href="#inicio" aria-label="Isaac Castañeda Montoya, inicio"><span class="mono-badge">ICM</span><span class="brand-name">Isaac Castañeda Montoya</span></a>
     <ul class="nav-links">
       <li><a href="#proyecto">Proyecto</a></li>
-      <li><a href="#laboratorio">Laboratorio</a></li>
+      <li><a href="#datos">Datos científicos</a></li>
       <li><a href="#comunicacion">Comunicación</a></li>
       <li><a href="#herramientas">Herramientas</a></li>
       <li><a href="#formacion">Formación</a></li>
@@ -664,60 +664,37 @@
     </div>
   </section>
 
-  <section class="block" id="laboratorio" aria-labelledby="lab-titulo">
+  <section class="block" id="datos" aria-labelledby="datos-titulo">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">Laboratorio y medición</p>
-        <h2 id="lab-titulo">Siete laboratorios de física experimental</h2>
-        <p class="lead">En la licenciatura cursé los siete laboratorios del plan de estudios de Física de la Facultad de Ciencias (UNAM). En todos se repite el mismo ciclo: seguir un procedimiento, medir, estimar la incertidumbre, ajustar un modelo y reportar.</p>
+        <p class="eyebrow">Datos científicos</p>
+        <h2 id="datos-titulo">Datos reales del CERN y del observatorio HAWC</h2>
+        <p class="lead">En cursos de posgrado de la UNAM trabajé con datos reales de física de partículas y astropartículas. El ciclo es el mismo que en cualquier análisis: cargar y validar los datos, filtrar, construir variables nuevas, ajustar modelos y comunicar el resultado.</p>
       </div>
 
       <div class="practices">
         <div class="practice">
-          <h3>Procedimiento</h3>
-          <p>Experimentos conforme a guías y procedimientos, con registro sistemático de las mediciones.</p>
+          <h3>CMS (CERN): pares de muones</h3>
+          <p>Ingesta y validación de 100,000 eventos: conversión de texto a formato columnar (ROOT) con descarte de registros mal formados. Reconstrucción de la masa invariante e identificación de las resonancias J/ψ, ψ′, ϒ(1S), ϒ(2S) y Z. Ajuste de una ley de potencias al momento transverso y prueba de uniformidad en η y φ.</p>
+          <ul class="chips"><li>C++</li><li>ROOT</li><li>Histogramas</li><li>Ajuste de modelos</li></ul>
         </div>
         <div class="practice">
-          <h3>Instrumentos</h3>
-          <p>Uso básico de los equipos de laboratorio:</p>
-          <ul class="chips">
-            <li>Osciloscopio</li><li>Multímetro</li><li>Láseres y arreglos ópticos</li><li>Detectores</li>
-          </ul>
+          <h3>HAWC: cascadas atmosféricas</h3>
+          <p>Procesamiento de archivos de datos de disparo, reconstrucción y simulación Monte Carlo de cientos de MB. Control de calidad por canal, centroides ponderados por carga para localizar el núcleo de las cascadas, selección de los eventos con mayor señal y ajuste gaussiano de la energía simulada.</p>
+          <ul class="chips"><li>C++</li><li>ROOT</li><li>Control de calidad</li><li>Simulación</li></ul>
         </div>
         <div class="practice">
-          <h3>Incertidumbre</h3>
-          <p>Análisis de errores, propagación de incertidumbres y ajuste de curvas por mínimos cuadrados.</p>
-          <p class="formula" aria-label="Propagación de incertidumbres: sigma de f al cuadrado es la suma de las derivadas parciales al cuadrado por sigma de x sub i al cuadrado">σ<sub>f</sub><sup>2</sup> = Σ (∂f/∂x<sub>i</sub>)<sup>2</sup> σ<sub>i</sub><sup>2</sup></p>
+          <h3>Neutrinos: incertidumbre por Monte Carlo</h3>
+          <p>Muestreo de 10,000 configuraciones de parámetros dentro de sus rangos de 3σ para estimar la banda permitida de la masa efectiva <span class="nw">m<sub>ββ</sub></span> en ambos ordenamientos de masas.</p>
+          <ul class="chips"><li>Monte Carlo</li><li>Propagación de incertidumbre</li></ul>
         </div>
         <div class="practice">
-          <h3>Reporte</h3>
-          <p>Reportes técnicos con resultados, incertidumbres, gráficas y conclusiones.</p>
+          <h3>Falkner–Skan: métodos numéricos</h3>
+          <p>Proyecto en equipo: método de disparo (secante) con Runge–Kutta de cuarto orden, ajuste polinomial de la solución y visualización de las líneas de corriente de una capa límite.</p>
+          <ul class="chips"><li>Python</li><li>Métodos numéricos</li><li>Visualización</li></ul>
         </div>
       </div>
-
-      <p class="labs-title">Los laboratorios</p>
-      <ul class="labs">
-        <li><b>Mecánica</b><span>Medición de longitudes, tiempos y fuerzas; errores, gráficas y ajuste de curvas.</span></li>
-        <li><b>Fenómenos Colectivos</b><span>Medios continuos, termodinámica y ondas.</span></li>
-        <li><b>Electromagnetismo</b><span>Experimentos de electricidad y magnetismo y manejo de datos experimentales.</span></li>
-        <li><b>Óptica</b><span>Óptica geométrica, polarización, interferencia, difracción, láseres y optoelectrónica.</span></li>
-        <li><b>Electrónica</b><span>Instrumentos básicos de medición, dispositivos electrónicos y sistemas de medición.</span></li>
-        <li><b>Física Contemporánea I y II</b><span>Medición de constantes fundamentales y de efectos cuánticos; física atómica, nuclear y de materia condensada.</span></li>
-      </ul>
-      <p class="source-note">Contenidos según los programas oficiales de las asignaturas de la licenciatura en Física, Facultad de Ciencias, UNAM.</p>
-
-      <div class="service">
-        <div>
-          <h3>Laboratorio de Óptica Cuántica de Rydberg</h3>
-          <p class="where">Instituto de Física, UNAM · Servicio social</p>
-          <p class="when">2022–2023</p>
-        </div>
-        <ul>
-          <li>Revisión bibliográfica especializada en óptica cuántica y física atómica.</li>
-          <li>Apoyo en documentación técnica y organización de información científica.</li>
-          <li>Elaboración de diseños mediante Autodesk.</li>
-        </ul>
-      </div>
+      <p class="source-note">Trabajos de cursos de la UNAM (2022–2024). Los datos de CMS provienen del portal de datos abiertos del CERN.</p>
     </div>
   </section>
 
@@ -763,7 +740,7 @@
         <div class="tool-group">
           <h3>Métodos</h3>
           <ul class="chips">
-            <li>Estadística descriptiva e inferencial</li><li>Regresión y pruebas de hipótesis</li><li>Ajuste de curvas (mínimos cuadrados)</li><li>Análisis de incertidumbre</li><li>Simulación Monte Carlo</li><li>Métodos numéricos</li><li>Visualización de datos</li>
+            <li>Estadística descriptiva e inferencial</li><li>Regresión y pruebas de hipótesis</li><li>Ajuste de curvas (mínimos cuadrados)</li><li>Análisis y propagación de incertidumbre</li><li>Ingesta y validación de datos</li><li>Simulación Monte Carlo</li><li>Métodos numéricos</li><li>Visualización de datos</li>
           </ul>
         </div>
         <div class="tool-group">
